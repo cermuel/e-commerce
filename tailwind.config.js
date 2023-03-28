@@ -12,6 +12,10 @@ module.exports = {
     extend: {
       colors: {
         "pry-color": "#5D5FEF",
+        "input-grey": "#9796A1",
+      },
+      fontFamily: {
+        ibm: ["IBM", "sans-serif"],
       },
     },
   },
