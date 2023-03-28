@@ -41,10 +41,11 @@ export const handleLogin = (
 };
 
 //REGISTER USER
-export const handleRegister = ({
-  registerDetails,
-  setloading,
-}: RegisterDetails | any) => {
+export const handleRegister = (
+  registerDetails: RegisterDetails,
+  setloading: any,
+  extraFunc: any
+) => {
   let api = process?.env.NEXT_PUBLIC_API_URL + "auth/register";
   setloading(true);
 
@@ -58,10 +59,11 @@ export const handleRegister = ({
       .then((response) => {
         setloading(false);
         if (response.status == 400) {
-          toast.error("Email ALready Exists");
+          toast.error("Email Already Exists");
         }
         if (response.status == 200) {
           toast.success("Account successfully created");
+          extraFunc();
         } else {
           toast.error("An error occurred");
         }
@@ -89,6 +91,21 @@ export const handleLogout = (extraFunc: any) => {
     .then((response) => {
       toast.success("Successfully logged out");
       extraFunc();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+//GET LOGGED USER
+export const getLoggedUser = (setUser: any) => {
+  let api = process?.env.NEXT_PUBLIC_API_URL + "users/showMe";
+
+  axios
+    .get(api)
+    .then((response) => {
+      toast.success("Successfully logged out");
+      setUser(response.data);
     })
     .catch((error) => {
       console.log(error);

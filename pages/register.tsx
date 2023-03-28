@@ -16,6 +16,8 @@ const Register = () => {
     email: "",
     password: "",
   });
+
+  const registerUser = () => router.push("/");
   const [confirmPassword, setconfirmPassword] = useState<string>("");
   const [valid, setvalid] = useState(true);
   return (
@@ -57,7 +59,9 @@ const Register = () => {
         />
         <div className="w-full px-20 max-md:px-10 max-sm:px-5">
           <Button
-            onClick={() => handleRegister({ registerDetails, setloading })}
+            onClick={() =>
+              handleRegister(registerDetails, setloading, registerUser)
+            }
             text="Create Account"
             loading={loading}
           />

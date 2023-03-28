@@ -33,3 +33,14 @@ export type ProductCardType = {
   price: number | string;
   action?: any;
 };
+
+export type ProgressBarType = {
+  percentage: number;
+  strokeWidth: number;
+};
+
+export type ReviewCardType = {
+  userId?: string | number;
+  rating: number;
+  comment: string;
+};
