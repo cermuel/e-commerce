@@ -58,15 +58,8 @@ export const handleRegister = (
       .post(api, registerDetails)
       .then((response) => {
         setloading(false);
-        if (response.status == 400) {
-          toast.error("Email Already Exists");
-        }
-        if (response.status == 200) {
-          toast.success("Account successfully created");
-          extraFunc();
-        } else {
-          toast.error("An error occurred");
-        }
+        toast.success("Account successfully created");
+        extraFunc();
       })
       .catch((error) => {
         setloading(false);
