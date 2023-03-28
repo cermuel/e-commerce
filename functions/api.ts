@@ -3,10 +3,11 @@ import axios from "axios";
 import { LoginDetails, RegisterDetails } from "@/types";
 
 //LOGIN USER
-export const handleLogin = ({
-  loginDetails,
-  setloading,
-}: LoginDetails | any) => {
+export const handleLogin = (
+  loginDetails: LoginDetails,
+  setloading: any,
+  extraFunc: any
+) => {
   let api = process?.env.NEXT_PUBLIC_API_URL + "auth/login";
   setloading(true);
 
@@ -21,12 +22,13 @@ export const handleLogin = ({
         }
         if (response.status == 200) {
           toast.success("Login successful");
+          extraFunc();
         }
       })
       .catch((error) => {
         setloading(false);
         console.log(error);
-        if (error.response.status == 401) {
+        if (error?.response?.status == 401) {
           toast.error("Invalid login details");
         } else {
           toast.error("An error occurred");
@@ -78,6 +80,22 @@ export const handleRegister = ({
   }
 };
 
+//LOGOUT USER
+export const handleLogout = (extraFunc: any) => {
+  let api = process?.env.NEXT_PUBLIC_API_URL + "auth/logout";
+
+  axios
+    .get(api)
+    .then((response) => {
+      toast.success("Successfully logged out");
+      extraFunc();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+//GET ALL PRODUCTS
 export const getAllProducts = ({ setdata, setloading, seterror }: any) => {
   let api = process?.env.NEXT_PUBLIC_API_URL + "products";
   setloading(true);
@@ -92,6 +110,8 @@ export const getAllProducts = ({ setdata, setloading, seterror }: any) => {
       seterror(error);
     });
 };
+
+//GET SINGLE PRODUCT
 export const getSingleProduct = ({
   setdata,
   setloading,

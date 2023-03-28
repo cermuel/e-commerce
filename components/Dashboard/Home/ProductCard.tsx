@@ -15,7 +15,7 @@ const ProductCard = ({ image, name, price, action }: ProductCardType) => {
       />
       <div className="px-2 text-input-grey font-light capitalize ">{name}</div>
       <div className="font-semibold px-2">
-        {formatKoboAmountForDisplay(Number(price))}
+        {formatKoboAmountForDisplay(Number(`${price}00`))}
       </div>
     </div>
   );

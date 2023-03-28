@@ -1,7 +1,10 @@
+import ErrorPage from "@/components/Dashboard/ErrorPage";
 import ProductCard from "@/components/Dashboard/Home/ProductCard";
 import Search from "@/components/Dashboard/Home/Search";
+import Loader from "@/components/Dashboard/Loader";
 import DashboardLayout from "@/components/DashboardLayout";
 import { getAllProducts } from "@/functions/api";
+import { useRouter } from "next/router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
@@ -10,6 +13,7 @@ const Index = () => {
   const [data, setdata] = useState<any>();
   const [error, seterror] = useState<any | null | undefined>();
   const [search, setsearch] = useState<string>("");
+  const router = useRouter();
   useLayoutEffect(() => {
     if (data == undefined) {
       getAllProducts({ setdata, setloading, seterror });
@@ -22,7 +26,6 @@ const Index = () => {
   let filteredProducts = data?.products?.filter((product: any) => {
     return product.name.toLowerCase().includes(search.toLowerCase());
   });
-
   if (filteredProducts) {
     return (
       <DashboardLayout>
@@ -42,6 +45,7 @@ const Index = () => {
                   image={product.image}
                   name={product.name}
                   price={product.price}
+                  action={() => router.push(`/dashboard/home/${product.id}`)}
                 />
               </div>
             );
@@ -49,6 +53,10 @@ const Index = () => {
         </section>
       </DashboardLayout>
     );
+  } else if (error) {
+    return <ErrorPage />;
+  } else {
+    return <Loader />;
   }
 };
 export default Index;

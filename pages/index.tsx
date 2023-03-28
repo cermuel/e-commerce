@@ -14,6 +14,7 @@ export default function Home() {
   });
   const [loading, setloading] = useState<boolean>(false);
   const router = useRouter();
+  const loginUser = () => router.push("/dashboard/home");
   return (
     <div className="flex w-screen h-screen">
       <div className="w-[40%] max-md:w-full h-full bg-[white] px-10 max-sm:px-6 space-y-8 flex flex-col justify-center">
@@ -39,7 +40,7 @@ export default function Home() {
           <Button
             loading={loading}
             text="Login"
-            onClick={() => handleLogin({ loginDetails, setloading })}
+            onClick={() => handleLogin(loginDetails, setloading, loginUser)}
           />
           <div
             className="w-full text-center underline cursor-pointer text-pry-color mt-2"
