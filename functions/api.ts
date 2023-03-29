@@ -13,7 +13,7 @@ export const handleLogin = (
 
   if (loginDetails.email && loginDetails.password) {
     axios
-      .post(api, loginDetails)
+      .post(api, loginDetails, { withCredentials: true })
       .then((response) => {
         setloading(false);
         console.log(response);
