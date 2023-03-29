@@ -12,27 +12,29 @@ export const handleLogin = (
   setloading(true);
 
   if (loginDetails.email && loginDetails.password) {
+    const axios = require("axios");
+    let data = JSON.stringify({
+      email: loginDetails.email,
+      password: loginDetails.password,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: api,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
     axios
-      .post(api, loginDetails, { withCredentials: true })
-      .then((response) => {
-        setloading(false);
-        console.log(response);
-        if (response.status == 401) {
-          toast.error("Invalid login details");
-        }
-        if (response.status == 200) {
-          toast.success("Login successful");
-          extraFunc();
-        }
+      .request(config)
+      .then((response: any) => {
+        console.log(JSON.stringify(response.data));
       })
-      .catch((error) => {
-        setloading(false);
+      .catch((error: any) => {
         console.log(error);
-        if (error?.response?.status == 401) {
-          toast.error("Invalid login details");
-        } else {
-          toast.error("An error occurred");
-        }
       });
   } else {
     toast.error("Fill all the fields");
