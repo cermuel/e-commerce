@@ -44,3 +44,25 @@ export type ReviewCardType = {
   rating: number;
   comment: string;
 };
+
+export type CartItemType = {
+  name: string;
+  price: number | string;
+  image: string;
+  amount: number | string;
+  product: string;
+};
+export type LocalStorageItems = {
+  name: string;
+  price: number | string;
+  image: string;
+  amount: number | string;
+  product: string;
+};
+
+export type CartType = {
+  tax: number | string;
+  shippingFee: number | string | any;
+  items: CartItemType[];
+  localStorageItems: LocalStorageItems[];
+};

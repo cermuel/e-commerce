@@ -2,6 +2,8 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { LoginDetails, RegisterDetails } from "@/types";
 
+// axios.defaults.withCredentials = true;
+
 //LOGIN USER
 export const handleLogin = (
   loginDetails: LoginDetails,
@@ -12,29 +14,24 @@ export const handleLogin = (
   setloading(true);
 
   if (loginDetails.email && loginDetails.password) {
-    const axios = require("axios");
-    let data = JSON.stringify({
-      email: loginDetails.email,
-      password: loginDetails.password,
-    });
-
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: api,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
-
     axios
-      .request(config)
-      .then((response: any) => {
-        console.log(JSON.stringify(response.data));
+      .post(api, loginDetails, {
+        withCredentials: false,
+      })
+      .then((response) => {
+        setloading(false);
+        console.log(response);
+        toast.success("Login successful");
+        extraFunc();
       })
       .catch((error: any) => {
         console.log(error);
+        setloading(false);
+        if (error.response && error.response?.status == 401) {
+          toast.error("Invalid credentials");
+        } else {
+          toast.error("Something went wrong");
+        }
       });
   } else {
     toast.error("Fill all the fields");

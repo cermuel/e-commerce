@@ -6,9 +6,14 @@ import DashboardLayout from "@/components/DashboardLayout";
 import { formatKoboAmountForDisplay } from "@/functions";
 import { getSingleProduct } from "@/functions/api";
 import { useRouter } from "next/router";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useEffect, useState } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { BsCart3 } from "react-icons/bs";
+import { AiOutlineCheck } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { CartItemType } from "@/types";
+import { addToCart, removeFromCart } from "@/store/reducers/cartReducer";
+import { toast, Toaster } from "react-hot-toast";
 
 const SingleProduct = () => {
   const router = useRouter();
@@ -17,6 +22,34 @@ const SingleProduct = () => {
   const [loading, setloading] = useState();
   const [error, seterror] = useState();
   const [showRatings, setshowRatings] = useState(false);
+  const [isAdded, setisAdded] = useState(false);
+  const [cartItem, setcartItem] = useState<CartItemType>({
+    name: "",
+    image: "",
+    product: "",
+    price: 0,
+    amount: 0,
+  });
+
+  const dispatch = useDispatch();
+  // const cart = useSelector((state: any) => state.cart);
+  // // useEffect(() => {
+  // //   console.log(cart);
+  // // }, [isAdded]);
+
+  const addToMyCart = async () => {
+    if (data.product) {
+      setcartItem({
+        name: data?.product?.name,
+        image: data?.product?.image,
+        product: data?.product?.id,
+        price: data?.product?.price,
+        amount: 1,
+      });
+      setisAdded(true);
+      await dispatch(addToCart(cartItem));
+    }
+  };
 
   useLayoutEffect(() => {
     if (id) {
@@ -32,14 +65,21 @@ const SingleProduct = () => {
     return (
       <DashboardLayout>
         <div className="pb-8">
+          <Toaster />
           <div
-            className="h-9 cursor-pointer max-md:hidden animate-ping  top-2 right-2 fixed w-9 bg-pry-color flex items-center justify-center rounded-full"
-            style={{
-              animationIterationCount: 2,
-            }}
+            onClick={() => addToMyCart()}
+            className="gap-2 fixed rounded-full text-white w-40 h-8 top-1 right-1 bg-pry-color max-md:hidden flex items-center justify-center cursor-pointer"
           >
-            <BsCart3 className="text-white text-xl" />
+            <div className="h-[95%] w-7 bg-white flex items-center justify-center rounded-full">
+              {isAdded ? (
+                <AiOutlineCheck className="text-pry-color text-xl" />
+              ) : (
+                <BsCart3 className="text-pry-color text-xl" />
+              )}
+            </div>
+            Add To Cart
           </div>
+
           <div className="w-full h-80 px-4 mt-12">
             <img
               src={data.product.image}
@@ -109,9 +149,18 @@ const SingleProduct = () => {
             </>
           )}
 
-          <div className="fixed gap-2 rounded-full text-white w-40 h-10 bottom-4 left-[50%] translate-x-[-50%]  bg-pry-color md:hidden flex items-center justify-center cursor-pointer">
+          <div
+            onClick={() => {
+              addToMyCart();
+            }}
+            className="fixed gap-2 rounded-full text-white w-40 h-10 bottom-4 left-[50%] translate-x-[-50%]  bg-pry-color md:hidden flex items-center justify-center cursor-pointer"
+          >
             <div className="h-[95%] w-10 bg-white flex items-center justify-center rounded-full">
-              <BsCart3 className="text-pry-color text-xl" />
+              {isAdded ? (
+                <AiOutlineCheck className="text-pry-color text-xl" />
+              ) : (
+                <BsCart3 className="text-pry-color text-xl" />
+              )}
             </div>
             Add To Cart
           </div>
